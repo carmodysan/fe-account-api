@@ -72,6 +72,8 @@ class MonthlyAccount
         return $this;
     }
 
+    // TODO Créer une relation entre cette classe et User
+
     /**
      * @return Collection|Operation[]
      */
