@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\OperationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -15,8 +16,9 @@ class Operation
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
      * @ORM\Column(type="uuid", unique=true)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      */
     private $id;
 
@@ -55,11 +57,6 @@ class Operation
      * @ORM\JoinColumn(nullable=false)
      */
     private $monthlyAccount;
-
-    public function __construct()
-    {
-        $this->id = Uuid::v4();
-    }
 
     public function getId(): Uuid
     {

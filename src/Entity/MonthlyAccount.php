@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\MonthlyAccountRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
@@ -17,8 +18,9 @@ class MonthlyAccount
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
      * @ORM\Column(type="uuid", unique=true)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      */
     private $id;
 
@@ -39,7 +41,6 @@ class MonthlyAccount
 
     public function __construct()
     {
-        $this->id = Uuid::v4();
         $this->operations = new ArrayCollection();
     }
 
