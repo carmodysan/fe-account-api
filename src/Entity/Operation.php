@@ -7,9 +7,18 @@ use App\Repository\OperationRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Serializer\Annotation\Groups;
+
+// TODO : mettre en place la suppression et la modification, voir tuto ci-dessous
 
 /**
- * @ApiResource()
+ * Cette classe est librement inspiré depuis le tuto :
+ * https://www.kaherecode.com/tutorial/developper-une-api-rest-avec-symfony-et-api-platform-autorisation
+ * Il reste à traiter la moddification et la suppression, voir TODO
+ * 
+ * @ApiResource(
+ *      normalizationContext={"groups"={"operation:read"}},
+ *      denormalizationContext={"groups"={"operation:write"}},)
  * @ORM\Entity(repositoryClass=OperationRepository::class)
  */
 class Operation
@@ -19,42 +28,58 @@ class Operation
      * @ORM\Column(type="uuid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class=UuidGenerator::class)
+     * 
+     * @Groups({"operation:read", "monthlyaccount:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="date")
+     * 
+     * @Groups({"operation:read", "operation:write", "monthlyaccount:read"})
      */
     private $dateOp;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
+     * @Groups({"operation:read", "operation:write", "monthlyaccount:read"})
      */
     private $category;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
+     * @Groups({"operation:read", "operation:write", "monthlyaccount:read"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * 
+     * @Groups({"operation:read", "operation:write", "monthlyaccount:read"})
      */
     private $credit;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * 
+     * @Groups({"operation:read", "operation:write", "monthlyaccount:read"})
      */
     private $debit;
 
     /**
      * @ORM\Column(type="boolean")
+     * 
+     * @Groups({"operation:read", "operation:write", "monthlyaccount:read"})
      */
     private $checked;
 
     /**
      * @ORM\ManyToOne(targetEntity=MonthlyAccount::class, inversedBy="operations")
      * @ORM\JoinColumn(nullable=false)
+     * 
+     * @Groups({"operation:write"})
      */
     private $monthlyAccount;
 

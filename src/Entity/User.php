@@ -2,15 +2,30 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Serializer\Annotation\Groups;
+
+// TODO : mettre en place la suppression et la modification, voir tuto ci-dessous
 
 /**
+ * Cette classe est librement inspiré depuis le tuto :
+ * https://www.kaherecode.com/tutorial/developper-une-api-rest-avec-symfony-et-api-platform-autorisation
+ * Il reste à traiter la moddification et la suppression, voir TODO
+ * 
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * 
+ * @ApiResource(
+ *      normalizationContext={"groups"={"user:read"}},
+ *      denormalizationContext={"groups"={"user:write"}}
+ * )
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -19,29 +34,51 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="uuid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class=UuidGenerator::class)
+     * 
+     * @Groups({"user:read", "monthlyaccount:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * 
+     * @Groups({"user:read", "user:write"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
+     * 
+     * @Groups("user:read")
      */
     private $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * 
+     * @Groups({"user:read", "user:write"})
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
+     * @Groups({"user:read", "user:write", "monthlyaccount:read"})
      */
     private $name;
+
+    /**
+     * @ORM\OneToMany(targetEntity=MonthlyAccount::class, mappedBy="author")
+     * 
+     * @Groups("user:read")
+     */
+    private $monthlyAccounts;
+
+    public function __construct()
+    {
+        $this->monthlyAccounts = new ArrayCollection();
+    }
 
     public function getId(): Uuid
     {
@@ -140,6 +177,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|MonthlyAccount[]
+     */
+    public function getMonthlyAccounts(): Collection
+    {
+        return $this->monthlyAccounts;
+    }
+
+    public function addMonthlyAccount(MonthlyAccount $monthlyAccount): self
+    {
+        if (!$this->monthlyAccounts->contains($monthlyAccount)) {
+            $this->monthlyAccounts[] = $monthlyAccount;
+            $monthlyAccount->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMonthlyAccount(MonthlyAccount $monthlyAccount): self
+    {
+        if ($this->monthlyAccounts->removeElement($monthlyAccount)) {
+            // set the owning side to null (unless already changed)
+            if ($monthlyAccount->getAuthor() === $this) {
+                $monthlyAccount->setAuthor(null);
+            }
+        }
 
         return $this;
     }
