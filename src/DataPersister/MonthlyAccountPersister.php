@@ -8,6 +8,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
+/**
+ * Persister pour effectuer des actions particulières avant la persistence
+ */
 class MonthlyAccountPersister implements ContextAwareDataPersisterInterface
 {
     /**
