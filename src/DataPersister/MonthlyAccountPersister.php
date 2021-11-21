@@ -4,7 +4,9 @@ namespace App\DataPersister;
 
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use App\Entity\MonthlyAccount;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -23,16 +25,25 @@ class MonthlyAccountPersister implements ContextAwareDataPersisterInterface
      */
     private $_security;
 
+    /**
+     * @var SluggerInterface
+     */
     private $_slugger;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $_logger;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(EntityManagerInterface $entityManager, Security $security, SluggerInterface $slugger)
+    public function __construct(EntityManagerInterface $entityManager, Security $security, SluggerInterface $slugger, LoggerInterface $logger)
     {
         $this->_entityManager = $entityManager;
         $this->_security = $security;
         $this->_slugger = $slugger;
+        $this->_logger = $logger;
     }
 
     /**
@@ -48,13 +59,18 @@ class MonthlyAccountPersister implements ContextAwareDataPersisterInterface
      */
     public function persist($data, array $context = [])
     {
+        $this->_logger->debug('===> Persisting...');
+
         // Set the author if it's a new monthlyAccount
         if (($context['collection_operation_name'] ?? null) === 'post') {
             $data->setAuthor($this->_security->getUser());
         }
 
         // Set the slug
-        $data->setSlug($this->_slugger->slug(date('F-Y', strtotime(strval($data->getYear()).strval($data->getMonth()).'01'))) . '-' . uniqid());
+        $date = DateTime::createFromFormat('n-Y', $data->getMonth().'-'.$data->getYear());
+        $formatDate = $date->format('F-Y');
+        $this->_logger->debug('Format date : '.$formatDate);
+        $data->setSlug($this->_slugger->slug($formatDate. '-' . uniqid()));
 
         $this->_entityManager->persist($data);
         $this->_entityManager->flush();
