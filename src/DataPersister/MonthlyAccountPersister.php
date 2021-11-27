@@ -68,7 +68,7 @@ class MonthlyAccountPersister implements ContextAwareDataPersisterInterface
 
         // Set the slug
         $date = DateTime::createFromFormat('n-Y', $data->getMonth().'-'.$data->getYear());
-        $formatDate = $date->format('F-Y');
+        $formatDate = strtolower($date->format('F-Y'));
         $this->_logger->debug('Format date : '.$formatDate);
         $data->setSlug($this->_slugger->slug($formatDate. '-' . uniqid()));
 

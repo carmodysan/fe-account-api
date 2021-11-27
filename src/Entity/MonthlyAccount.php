@@ -74,7 +74,7 @@ class MonthlyAccount
     /**
      * @ORM\Column(type="string", length=255)
      * 
-     * @Groups("article:read")
+     * @Groups("monthlyaccount:read")
      */
     private $slug;
 
