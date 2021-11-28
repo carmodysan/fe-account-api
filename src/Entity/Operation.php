@@ -55,14 +55,14 @@ class Operation
     private $description;
 
     /**
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
      * 
      * @Groups({"operation:read", "operation:write", "monthlyaccount:read"})
      */
     private $credit;
 
     /**
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
      * 
      * @Groups({"operation:read", "operation:write", "monthlyaccount:read"})
      */
