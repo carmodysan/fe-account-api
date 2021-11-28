@@ -18,7 +18,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * 
  * @ApiResource(
  *      normalizationContext={"groups"={"operation:read"}},
- *      denormalizationContext={"groups"={"operation:write"}},)
+ *      denormalizationContext={"groups"={"operation:write"}},
+ * )
  * @ORM\Entity(repositoryClass=OperationRepository::class)
  */
 class Operation
