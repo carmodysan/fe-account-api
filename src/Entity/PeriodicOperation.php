@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\PeriodicOperationRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
@@ -16,6 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *      normalizationContext={"groups"={"periodicOperation:read"}},
  *      denormalizationContext={"groups"={"periodicOperation:write"}},
  * )
+ * @ApiFilter(SearchFilter::class, properties={"authorId": "exact"})
  * @ORM\Entity(repositoryClass=PeriodicOperationRepository::class)
  */
 class PeriodicOperation

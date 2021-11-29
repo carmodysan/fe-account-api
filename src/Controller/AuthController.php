@@ -60,7 +60,7 @@ class AuthController extends AbstractController
     }
 
     /**
-     * @Route("/periodic_operations", name="user.preiod")
+     * @Route("/periodic_operationstest", name="user.preiod")
      *
      * @return JsonResponse
      */
