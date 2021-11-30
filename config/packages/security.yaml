@@ -38,4 +38,5 @@ security:
         - { path: ^/api/register,   roles: PUBLIC_ACCESS }
         # For debug, uncomment line below
         #- { path: ^/api/docs,       roles: PUBLIC_ACCESS }
-        - { path: ^/api,            roles: IS_AUTHENTICATED_FULLY,  requires_channel: https }
+        - { path: ^/api/periodic_operations,            roles: IS_AUTHENTICATED_FULLY,  requires_channel: https }
+        - { path: ^/api,            roles: IS_AUTHENTICATED_FULLY }
