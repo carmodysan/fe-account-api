@@ -61,11 +61,6 @@ class MonthlyAccountPersister implements ContextAwareDataPersisterInterface
     {
         $this->_logger->debug('===> Persisting...');
 
-        // Set the author if it's a new monthlyAccount
-        if (($context['collection_operation_name'] ?? null) === 'post') {
-            $data->setAuthor($this->_security->getUser());
-        }
-
         // Set the slug
         $date = DateTime::createFromFormat('n-Y', $data->getMonth().'-'.$data->getYear());
         $formatDate = strtolower($date->format('F-Y'));
