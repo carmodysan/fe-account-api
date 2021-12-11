@@ -13,6 +13,7 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 // TODO : mettre en place la suppression et la modification, voir tuto ci-dessous
+// TODO : on peut surement enlever le user:read puisque le lien avec User est coupé
 
 /**
  * Cette classe est librement inspiré depuis le tuto :
@@ -64,19 +65,19 @@ class MonthlyAccount
     private $operations;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="monthlyAccounts")
-     * @ORM\JoinColumn(nullable=false)
-     * 
-     * @Groups("monthlyaccount:read")
-     */
-    private $author;
-
-    /**
      * @ORM\Column(type="string", length=255)
      * 
      * @Groups("monthlyaccount:read")
      */
     private $slug;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Account::class, inversedBy="monthlyAccounts")
+     * @ORM\JoinColumn(nullable=false)
+     * 
+     * @Groups({"monthlyaccount:read", "monthlyaccount:write"})
+     */
+    private $account;
 
     public function __construct()
     {
@@ -162,6 +163,18 @@ class MonthlyAccount
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getAccount(): ?Account
+    {
+        return $this->account;
+    }
+
+    public function setAccount(?Account $account): self
+    {
+        $this->account = $account;
 
         return $this;
     }

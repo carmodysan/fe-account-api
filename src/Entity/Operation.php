@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use App\Repository\OperationRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
@@ -20,6 +22,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *      normalizationContext={"groups"={"operation:read"}},
  *      denormalizationContext={"groups"={"operation:write"}},
  * )
+ * @ApiFilter(OrderFilter::class, properties={"dateOp": "ASC"})
  * @ORM\Entity(repositoryClass=OperationRepository::class)
  */
 class Operation

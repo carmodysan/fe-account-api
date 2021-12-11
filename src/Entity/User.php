@@ -68,18 +68,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $name;
 
-    /**
-     * @ORM\OneToMany(targetEntity=MonthlyAccount::class, mappedBy="author")
-     * 
-     * @Groups("user:read")
-     */
-    private $monthlyAccounts;
-
-    public function __construct()
-    {
-        $this->monthlyAccounts = new ArrayCollection();
-    }
-
     public function getId(): Uuid
     {
         return $this->id;
@@ -177,36 +165,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|MonthlyAccount[]
-     */
-    public function getMonthlyAccounts(): Collection
-    {
-        return $this->monthlyAccounts;
-    }
-
-    public function addMonthlyAccount(MonthlyAccount $monthlyAccount): self
-    {
-        if (!$this->monthlyAccounts->contains($monthlyAccount)) {
-            $this->monthlyAccounts[] = $monthlyAccount;
-            $monthlyAccount->setAuthor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMonthlyAccount(MonthlyAccount $monthlyAccount): self
-    {
-        if ($this->monthlyAccounts->removeElement($monthlyAccount)) {
-            // set the owning side to null (unless already changed)
-            if ($monthlyAccount->getAuthor() === $this) {
-                $monthlyAccount->setAuthor(null);
-            }
-        }
 
         return $this;
     }
