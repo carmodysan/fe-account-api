@@ -7,7 +7,6 @@ use App\Entity\MonthlyAccount;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 /**
@@ -19,11 +18,6 @@ class MonthlyAccountPersister implements ContextAwareDataPersisterInterface
      * @var EntityManagerInterface
      */
     private $_entityManager;
-
-    /**
-     * @param Security
-     */
-    private $_security;
 
     /**
      * @var SluggerInterface
@@ -38,10 +32,9 @@ class MonthlyAccountPersister implements ContextAwareDataPersisterInterface
     /**
      * {@inheritdoc}
      */
-    public function __construct(EntityManagerInterface $entityManager, Security $security, SluggerInterface $slugger, LoggerInterface $logger)
+    public function __construct(EntityManagerInterface $entityManager, SluggerInterface $slugger, LoggerInterface $logger)
     {
         $this->_entityManager = $entityManager;
-        $this->_security = $security;
         $this->_slugger = $slugger;
         $this->_logger = $logger;
     }

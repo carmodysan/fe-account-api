@@ -7,7 +7,6 @@ use App\Entity\Account;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 /**
@@ -19,11 +18,6 @@ class AccountPersister implements ContextAwareDataPersisterInterface
      * @var EntityManagerInterface
      */
     private $_entityManager;
-
-    /**
-     * @param Security
-     */
-    private $_security;
 
     /**
      * @var SluggerInterface
@@ -38,10 +32,9 @@ class AccountPersister implements ContextAwareDataPersisterInterface
     /**
      * {@inheritdoc}
      */
-    public function __construct(EntityManagerInterface $entityManager, Security $security, SluggerInterface $slugger, LoggerInterface $logger)
+    public function __construct(EntityManagerInterface $entityManager, SluggerInterface $slugger, LoggerInterface $logger)
     {
         $this->_entityManager = $entityManager;
-        $this->_security = $security;
         $this->_slugger = $slugger;
         $this->_logger = $logger;
     }
@@ -60,11 +53,6 @@ class AccountPersister implements ContextAwareDataPersisterInterface
     public function persist($data, array $context = [])
     {
         $this->_logger->debug('===> Persisting...');
-
-        // Set the author if it's a new monthlyAccount
-        // if (($context['collection_operation_name'] ?? null) === 'post') {
-        //     $data->setAuthorId($this->_security->getUser());
-        // }
 
         // Set the slug
         $formatBank = $this->cleanString($data->getBank());
