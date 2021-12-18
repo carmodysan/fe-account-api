@@ -60,6 +60,9 @@ class MonthlyAccountPersister implements ContextAwareDataPersisterInterface
         $this->_logger->debug('Format date : '.$formatDate);
         $data->setSlug($this->_slugger->slug($formatDate. '-' . uniqid()));
 
+        // set the active state
+        $data->setActive(false);
+
         $this->_entityManager->persist($data);
         $this->_entityManager->flush();
     }
