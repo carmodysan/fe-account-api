@@ -5,14 +5,21 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use App\Repository\CurrentAccountRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Uid\Uuid;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *      collectionOperations={
+ *         "get",
+ *         "post"={"security"="is_granted('ROLE_USER')"}
+ *     },
+ * )
  * @ApiFilter(SearchFilter::class, properties={"authorId": "exact"})
+ * @ApiFilter(OrderFilter::class, properties={"establishment": "ASC"})
  * @ORM\Entity(repositoryClass=CurrentAccountRepository::class)
  */
 class CurrentAccount extends AbstractAccount
