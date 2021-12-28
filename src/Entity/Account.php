@@ -24,7 +24,7 @@ use Symfony\Component\Uid\Uuid;
  *         "post"={"security"="is_granted('ROLE_USER')"}
  *     },
  * )
- * @ApiFilter(SearchFilter::class, properties={"authorId": "exact"})
+ * @ApiFilter(SearchFilter::class, properties={"authorId": "exact", "slug": "exact"})
  * @ApiFilter(OrderFilter::class, properties={"bank": "ASC"})
  * @ORM\Entity(repositoryClass=AccountRepository::class)
  */
