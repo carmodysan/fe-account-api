@@ -13,6 +13,7 @@ use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 // TODO : mettre en place la suppression et la modification, voir tuto ci-dessous
 // TODO : on peut surement enlever le user:read puisque le lien avec User est coupé
@@ -30,7 +31,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *         "post"={"security"="is_granted('ROLE_USER')"}
  *     },
  * )
- * @ApiFilter(SearchFilter::class, properties={"slug": "exact"})
  * @ORM\Entity(repositoryClass=MonthlyAccountRepository::class)
  */
 class MonthlyAccount
@@ -60,36 +60,26 @@ class MonthlyAccount
     private $month;
 
     /**
-     * @ORM\OneToMany(targetEntity=Operation::class, mappedBy="monthlyAccount", orphanRemoval=true)
-     * @ApiSubresource
-     * 
-     * @Groups("monthlyaccount:read")
-     */
-    private $operations;
-
-    /**
      * @ORM\Column(type="string", length=255)
-     * 
-     * @Groups("monthlyaccount:read")
+     * @Assert\Choice({"open", "close", "current"})
      */
-    private $slug;
+    private $state;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Account::class, inversedBy="monthlyAccounts")
+     * @ORM\ManyToOne(targetEntity=CurrentAccount::class, inversedBy="monthlyAccounts")
      * @ORM\JoinColumn(nullable=false)
-     * 
-     * @Groups({"monthlyaccount:read", "monthlyaccount:write"})
      */
-    private $account;
+    private $currentAccount;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\OneToMany(targetEntity=CurrentAccountOperation::class, mappedBy="monthlyAccount", orphanRemoval=true)
+     * @ApiSubresource
      */
-    private $active;
+    private $currentAccountOperations;
 
     public function __construct()
     {
-        $this->operations = new ArrayCollection();
+        $this->currentAccountOperations = new ArrayCollection();
     }
 
     public function getId(): Uuid
@@ -121,36 +111,6 @@ class MonthlyAccount
         return $this;
     }
 
-    /**
-     * @return Collection|Operation[]
-     */
-    public function getOperations(): Collection
-    {
-        return $this->operations;
-    }
-
-    public function addOperation(Operation $operation): self
-    {
-        if (!$this->operations->contains($operation)) {
-            $this->operations[] = $operation;
-            $operation->setMonthlyAccount($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOperation(Operation $operation): self
-    {
-        if ($this->operations->removeElement($operation)) {
-            // set the owning side to null (unless already changed)
-            if ($operation->getMonthlyAccount() === $this) {
-                $operation->setMonthlyAccount(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getAuthor(): ?User
     {
         return $this->author;
@@ -163,38 +123,56 @@ class MonthlyAccount
         return $this;
     }
 
-    public function getSlug(): ?string
+    public function getState(): ?string
     {
-        return $this->slug;
+        return $this->state;
     }
 
-    public function setSlug(string $slug): self
+    public function setState(string $state): self
     {
-        $this->slug = $slug;
+        $this->state = $state;
 
         return $this;
     }
 
-    public function getAccount(): ?Account
+    public function getCurrentAccount(): ?CurrentAccount
     {
-        return $this->account;
+        return $this->currentAccount;
     }
 
-    public function setAccount(?Account $account): self
+    public function setCurrentAccount(?CurrentAccount $currentAccount): self
     {
-        $this->account = $account;
+        $this->currentAccount = $currentAccount;
 
         return $this;
     }
 
-    public function getActive(): ?bool
+    /**
+     * @return Collection|CurrentAccountOperation[]
+     */
+    public function getCurrentAccountOperations(): Collection
     {
-        return $this->active;
+        return $this->currentAccountOperations;
     }
 
-    public function setActive(bool $active): self
+    public function addCurrentAccountOperation(CurrentAccountOperation $currentAccountOperation): self
     {
-        $this->active = $active;
+        if (!$this->currentAccountOperations->contains($currentAccountOperation)) {
+            $this->currentAccountOperations[] = $currentAccountOperation;
+            $currentAccountOperation->setMonthlyAccount($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCurrentAccountOperation(CurrentAccountOperation $currentAccountOperation): self
+    {
+        if ($this->currentAccountOperations->removeElement($currentAccountOperation)) {
+            // set the owning side to null (unless already changed)
+            if ($currentAccountOperation->getMonthlyAccount() === $this) {
+                $currentAccountOperation->setMonthlyAccount(null);
+            }
+        }
 
         return $this;
     }
