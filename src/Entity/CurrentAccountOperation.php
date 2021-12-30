@@ -55,6 +55,11 @@ class CurrentAccountOperation
      */
     private $monthlyAccount;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $fromPeriodic;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -140,6 +145,18 @@ class CurrentAccountOperation
     public function setMonthlyAccount(?MonthlyAccount $monthlyAccount): self
     {
         $this->monthlyAccount = $monthlyAccount;
+
+        return $this;
+    }
+
+    public function getFromPeriodic(): ?bool
+    {
+        return $this->fromPeriodic;
+    }
+
+    public function setFromPeriodic(bool $fromPeriodic): self
+    {
+        $this->fromPeriodic = $fromPeriodic;
 
         return $this;
     }
