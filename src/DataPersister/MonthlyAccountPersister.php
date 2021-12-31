@@ -52,16 +52,16 @@ class MonthlyAccountPersister implements ContextAwareDataPersisterInterface
      */
     public function persist($data, array $context = [])
     {
-        $this->_logger->debug('===> Persisting...');
+        $this->_logger->debug('===> Persisting Monthly Account...');
 
         // Set the slug
-        $date = DateTime::createFromFormat('n-Y', $data->getMonth().'-'.$data->getYear());
-        $formatDate = strtolower($date->format('F-Y'));
-        $this->_logger->debug('Format date : '.$formatDate);
-        $data->setSlug($this->_slugger->slug($formatDate. '-' . uniqid()));
+        // $date = DateTime::createFromFormat('n-Y', $data->getMonth().'-'.$data->getYear());
+        // $formatDate = strtolower($date->format('F-Y'));
+        // $this->_logger->debug('Format date : '.$formatDate);
+        // $data->setSlug($this->_slugger->slug($formatDate. '-' . uniqid()));
 
         // set the active state
-        $data->setActive(false);
+        // $data->setState('close');
 
         $this->_entityManager->persist($data);
         $this->_entityManager->flush();

@@ -16,7 +16,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 // TODO : mettre en place la suppression et la modification, voir tuto ci-dessous
-// TODO : on peut surement enlever le user:read puisque le lien avec User est coupé
 
 /**
  * Cette classe est librement inspiré depuis le tuto :
@@ -31,6 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         "post"={"security"="is_granted('ROLE_USER')"}
  *     },
  * )
+ * @ApiFilter(SearchFilter::class, properties={"state": "exact"})
  * @ORM\Entity(repositoryClass=MonthlyAccountRepository::class)
  */
 class MonthlyAccount
@@ -41,39 +41,45 @@ class MonthlyAccount
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      * 
-     * @Groups("monthlyaccount:read", "user:read")
+     * @Groups("monthlyaccount:read")
      */
     private $id;
 
     /**
      * @ORM\Column(type="integer")
      * 
-     * @Groups({"monthlyaccount:read", "monthlyaccount:write", "user:read"})
+     * @Groups({"monthlyaccount:read", "monthlyaccount:write"})
      */
     private $year;
 
     /**
      * @ORM\Column(type="integer")
      * 
-     * @Groups({"monthlyaccount:read", "monthlyaccount:write", "user:read"})
+     * @Groups({"monthlyaccount:read", "monthlyaccount:write"})
      */
     private $month;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Choice({"open", "close", "current"})
+     * 
+     * @Groups({"monthlyaccount:read", "monthlyaccount:write"})
      */
     private $state;
 
     /**
      * @ORM\ManyToOne(targetEntity=CurrentAccount::class, inversedBy="monthlyAccounts")
      * @ORM\JoinColumn(nullable=false)
+     * 
+     * @Groups({"monthlyaccount:read", "monthlyaccount:write"})
      */
     private $currentAccount;
 
     /**
      * @ORM\OneToMany(targetEntity=CurrentAccountOperation::class, mappedBy="monthlyAccount", orphanRemoval=true)
      * @ApiSubresource
+     * 
+     * @Groups({"monthlyaccount:read", "monthlyaccount:write"})
      */
     private $currentAccountOperations;
 
