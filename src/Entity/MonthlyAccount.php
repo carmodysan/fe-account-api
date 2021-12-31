@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use App\Repository\MonthlyAccountRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -31,6 +32,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     },
  * )
  * @ApiFilter(SearchFilter::class, properties={"state": "exact"})
+ * @ApiFilter(OrderFilter::class, properties={"year": "DESC", "month": "ASC"})
  * @ORM\Entity(repositoryClass=MonthlyAccountRepository::class)
  */
 class MonthlyAccount
@@ -61,7 +63,7 @@ class MonthlyAccount
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Choice({"open", "close", "current"})
+     * @Assert\Choice({"open", "close", "current", "upcoming"})
      * 
      * @Groups({"monthlyaccount:read", "monthlyaccount:write"})
      */
