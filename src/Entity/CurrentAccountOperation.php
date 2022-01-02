@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CurrentAccountOperationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @ApiResource()
@@ -14,8 +16,9 @@ class CurrentAccountOperation
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="uuid", unique=true)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      */
     private $id;
 
@@ -60,7 +63,7 @@ class CurrentAccountOperation
      */
     private $fromPeriodic;
 
-    public function getId(): ?int
+    public function getId(): Uuid
     {
         return $this->id;
     }
