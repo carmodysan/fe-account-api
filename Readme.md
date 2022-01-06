@@ -10,19 +10,20 @@ Cette programme a été conçus avec les technologies/framework/langages suivant
 Pour le moment, les contributions ne sont pas ouvertes.
 
 ## Versions
-**Version actuelle :** v0.4
+**Version actuelle :** v0.5
 
 *Amélioration :*
-* Mise en place d'une nouvelle structure pour la gestion des comptes
+* Passage de Symfony 5.3 à Symfony 6.0
 
 **Ancienne version :** 
+*  v0.4 : Mise en place d'un nouveau model de données pour les comptes et plus particulièrement les comptes courants
 *  v0.1 : Passage des attributs **credit** et **debit** de la classe **Operation** avec le type **Decimal**
 
 ## Auteur
 * **Carmodysan** _alias_ [@carmodysan](https://github.com/carmodysan)
 
 ## Licence
-Copyright 2021 carmodysan
+Copyright 2021-2022 carmodysan
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
