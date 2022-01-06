@@ -1,5 +1,19 @@
 # Changelog du front de Facilepargne
 
+## Version en cours
+### Version 0.6
+Mise en place d'un modèle de données pour toute la partie traitement des fonctionnaires
+
+*Ajout :*
+* Référentiel pour les grades
+* Référentiel pour les grilles
+
+*Correction de bug :*
+* Pas de correction
+
+*Suppression :*
+* Pas de suppression
+
 ## Dernière version
 ### Version 0.5
 Mise à jour des composants techniques.
