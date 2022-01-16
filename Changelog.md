@@ -3,6 +3,7 @@
 ## Version en cours
 ### Version 0.6
 Mise en place d'un modèle de données pour toute la partie traitement des fonctionnaires
+Mise en place d'un modèle de données pour la partie compte d'épargne
 
 *Ajout :*
 * Référentiel pour les grades
