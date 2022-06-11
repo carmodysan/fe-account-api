@@ -10,12 +10,13 @@ Cette programme a été conçus avec les technologies/framework/langages suivant
 Pour le moment, les contributions ne sont pas ouvertes.
 
 ## Versions
-**Version actuelle :** v0.5
+**Version actuelle :** v0.6
 
 *Amélioration :*
-* Passage de Symfony 5.3 à Symfony 6.0
+* Mise en place d'un modèle pour calculer le traitement des ICD
 
 **Ancienne version :** 
+*  v0.5 : Passage de Symfony 5.3 à Symfony 6.0
 *  v0.4 : Mise en place d'un nouveau model de données pour les comptes et plus particulièrement les comptes courants
 *  v0.1 : Passage des attributs **credit** et **debit** de la classe **Operation** avec le type **Decimal**
 
